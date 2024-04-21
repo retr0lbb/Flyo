@@ -1,12 +1,12 @@
-import { AirPlane } from "./models/plane.class"
-import {Passager, PassagerProps} from "./models/passager"
+import fastify from "fastify";
+import {getAirplane} from "./routes/get-airplane"
 
-const boeing = new AirPlane({destiny: "Cancún", maximunNumberOfPassagers: 120, model: "747"})
-const henrique = new Passager({email: "retr0lbb@gmail.com", name: "Henrique Barbosa Sampaio"})
-const madona = new Passager({email: "Madona.com", name: "madonna maradona"})
+const app = fastify()
+app.register(getAirplane)
 
-
-const seatThatiWant = boeing.getSeat[0]
-boeing.assingPersonToSeat(seatThatiWant, henrique)
-boeing.assingPersonToSeat(seatThatiWant, madona)
-console.log(seatThatiWant)
+app.listen({
+    port: 3333
+})
+.then(() => {
+    console.log("Http Server running")
+})

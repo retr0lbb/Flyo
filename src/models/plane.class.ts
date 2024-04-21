@@ -1,33 +1,32 @@
-import {PlaneSeat, PlaneSeatProps} from "./plane-seat.class"
-import {PassagerProps, Passager} from "./passager"
-
+import { PlaneSeat } from "./plane-seat.class";
+import { Passager } from "./passager";
 
 export interface AirPlaneProps {
     maximunNumberOfPassagers: number
-    destiny: string
+    destiny: any
     model: string
+    seats?: PlaneSeat[]
 }
 
 export class AirPlane{
-    private maximunNumberOfPassagers: number = 0
-    private destiny: any
-    private model: string
-    private seats: PlaneSeat[] = []
 
-    constructor({destiny, maximunNumberOfPassagers, model}: AirPlaneProps){
-        this.model = model;
-        this.destiny = destiny;
-        this.maximunNumberOfPassagers = maximunNumberOfPassagers
+    private props: AirPlaneProps
 
+    constructor(props: AirPlaneProps){
+        this.props = props
+        this.props.seats = []
         this.generateSeats()
     }
 
-    get getSeat(): PlaneSeat[]{
-        return this.seats
+    get seats(): PlaneSeat[]{
+        if(this.props.seats == undefined){
+            this.props.seats = []
+        }
+        return this.props.seats
     }
 
     private generateSeats(){
-        const numberOfRows = this.maximunNumberOfPassagers / 6
+        const numberOfRows = this.props.maximunNumberOfPassagers / 6
 
         for (let index = 1; index <= numberOfRows; index++) {
             const seat = new PlaneSeat({price: 1000, row: index, seat: "D"})
@@ -45,8 +44,5 @@ export class AirPlane{
         seat.props.signedPerson = person
     }
 }
-
-
-const boeng = new AirPlane({destiny: "EUA", maximunNumberOfPassagers: 120, model: "Boeing 747"})
 
 
