@@ -1,4 +1,5 @@
 import {PlaneSeat, PlaneSeatProps} from "./plane-seat.class"
+import {PassagerProps, Passager} from "./passager"
 
 
 export interface AirPlaneProps {
@@ -34,6 +35,14 @@ export class AirPlane{
         }
 
         return this.seats
+    }
+
+    assingPersonToSeat(seat: PlaneSeat, person: Passager){
+        if(seat.props.signedPerson !== null){
+            throw new Error("This seat is already assigned")
+        }
+
+        seat.props.signedPerson = person
     }
 }
 
