@@ -10,9 +10,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Plane {
+model AirPlane {
   id                       String @id @default(uuid())
   maximunNumberOfPassagers Int    @map("max_passagers")
   destiny                  String
   airPlaneModel            String @map("plane_model")
+
+  seats PlaneSeat[]
+}
+
+model PlaneSeat {
+  id Int @id @default(autoincrement())
+
+  airplane   AirPlane @relation(fields: [airPlaneId], references: [id])
+  airPlaneId String
+
+  @@map("plane_seat")
 }

@@ -1,14 +1,14 @@
 import { FastifyInstance } from "fastify"
-import { AirPlane } from "../models/plane.class"
+import { AirPlane } from "../schemas/plane.class"
 
 export async function getAirplane(app: FastifyInstance) {
-    app.get("/plane", (req, res)=>{
+    app.get("/plane", async(req, res)=>{
+        const planes = await AirPlane.find()
 
-        const plane = new AirPlane({
-            destiny: "Cancun", 
-            maximunNumberOfPassagers: 100, 
-            model: "519"
-        })
-        return res.status(200).send({plane})
+        if(!planes){
+            return res.status(404).send({message: "No planes finded"})
+        }
+
+        return res.status(200).send({planes})
     })
 }

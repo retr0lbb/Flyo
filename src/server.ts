@@ -1,6 +1,7 @@
 import fastify from "fastify";
 import {getAirplane} from "./routes/get-airplane"
 
+
 const app = fastify()
 app.register(getAirplane)
 
