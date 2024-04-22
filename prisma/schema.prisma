@@ -11,13 +11,12 @@ datasource db {
 }
 
 model AirPlane {
-  id                       String @id @default(uuid())
-  maximunNumberOfPassagers Int    @map("max_passagers")
+  id                       String      @id @default(uuid())
+  maximunNumberOfPassagers Int         @map("max_passagers")
   destiny                  String
-  airPlaneModel            String @map("plane_model")
-  flyCode                  String @unique
-
-  seats PlaneSeat[]
+  airPlaneModel            String      @map("plane_model")
+  flyCode                  String      @unique @map("fly_code")
+  seats                    PlaneSeat[]
 }
 
 model PlaneSeat {
@@ -27,4 +26,8 @@ model PlaneSeat {
   airPlaneId String
 
   @@map("plane_seat")
+}
+
+model Passager{
+  
 }

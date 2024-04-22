@@ -1,12 +1,14 @@
 import { PlaneSeat } from "./plane-seat.class";
 import { Passager } from "./passager";
 import { prisma } from "../lib/prisma";
+import { generateId } from "../lib/utils/generate-small-id";
 
 export interface AirPlaneProps {
     maximunNumberOfPassagers: number;
     destiny: any;
     model: string;
-    seats?: PlaneSeat[];
+    seats?: any[];
+    id: string
 }
 
 export class AirPlane {
@@ -18,10 +20,9 @@ export class AirPlane {
             ...props,
             seats: props.seats || [],
         };
-        this.generateSeats();
     }
 
-    get seats(): PlaneSeat[] {
+    get seats(): any[] {
         return this.props.seats ?? [];
     }
 
@@ -33,8 +34,11 @@ export class AirPlane {
                     airPlaneModel: this.props.model,
                     destiny: this.props.destiny,
                     maximunNumberOfPassagers: this.props.maximunNumberOfPassagers,
+                    flyCode: generateId()
                 }
             });
+            this.props.id = prismaReturn.id
+
             return prismaReturn;
         } catch (error) {
             console.error("Error creating airplane:", error);
@@ -67,20 +71,18 @@ export class AirPlane {
         }
     }
 
-    private generateSeats() {
-        const numberOfRows = Math.ceil(this.props.maximunNumberOfPassagers / 6);
-
-        for (let index = 1; index <= numberOfRows; index++) {
-            const seat = new PlaneSeat({ price: 1000, row: index, seat: "D" });
-            this.props.seats?.push(seat);
-        }
+    private async generateSeat() {
+        const createdSeat = await prisma.planeSeat.create({
+            data: {
+                airPlaneId: this.props.id,
+            }
+        })
+        this.props.seats?.push(createdSeat)
     }
 
-    assignPersonToSeat(seat: PlaneSeat, person: Passager) {
-        if (seat.props.signedPerson != null) {
-            throw new Error("This seat is already assigned");
-        }
+    async assignPersonToSeat(seat: PlaneSeat, person: Passager) {
+        this.generateSeat()
 
-        seat.props.signedPerson = person;
+        return this.props.seats
     }
 }
