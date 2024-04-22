@@ -25,6 +25,7 @@ export class AirPlane {
         return this.props.seats ?? [];
     }
 
+    //create an airplane
     async create() {
         try {
             const prismaReturn = await prisma.airPlane.create({
