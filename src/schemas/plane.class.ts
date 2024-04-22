@@ -52,6 +52,21 @@ export class AirPlane {
         }
     }
 
+    static async delete(planeId: string){
+        try {
+            await prisma.airPlane.delete({
+                where: {
+                    id: planeId
+                }
+            })
+            
+        } catch (error) {
+            if(error){
+                throw new Error("Server error")
+            }
+        }
+    }
+
     private generateSeats() {
         const numberOfRows = Math.ceil(this.props.maximunNumberOfPassagers / 6);
 

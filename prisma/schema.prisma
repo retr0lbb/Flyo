@@ -15,6 +15,7 @@ model AirPlane {
   maximunNumberOfPassagers Int    @map("max_passagers")
   destiny                  String
   airPlaneModel            String @map("plane_model")
+  flyCode                  String @unique
 
   seats PlaneSeat[]
 }

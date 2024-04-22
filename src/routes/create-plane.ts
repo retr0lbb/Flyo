@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import {z} from "zod"
+import { z } from "zod"
 import { AirPlane } from "../schemas/plane.class";
 
 export async function CreatePlane(app: FastifyInstance){
