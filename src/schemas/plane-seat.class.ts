@@ -1,9 +1,8 @@
 import { Passager } from "./passager"
 
 export interface PlaneSeatProps {
-    row: number;
-    seat: "A" | "B" | "C" | "D" | "E"| "F";
-    price: number;
+    id: number
+    airPlaneid: string
     signedPerson?: Passager | null
 }
 

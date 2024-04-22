@@ -7,7 +7,7 @@ export interface AirPlaneProps {
     maximunNumberOfPassagers: number;
     destiny: any;
     model: string;
-    seats?: any[];
+    seats?: PlaneSeat[];
     id: string
 }
 
@@ -22,7 +22,7 @@ export class AirPlane {
         };
     }
 
-    get seats(): any[] {
+    get seats(): PlaneSeat[] {
         return this.props.seats ?? [];
     }
 
@@ -77,12 +77,28 @@ export class AirPlane {
                 airPlaneId: this.props.id,
             }
         })
-        this.props.seats?.push(createdSeat)
+        const pushedPlaneSeat = new PlaneSeat({
+            id: createdSeat.id,
+            airPlaneid: createdSeat.airPlaneId
+        })
+        this.props.seats?.push(pushedPlaneSeat)
     }
 
-    async assignPersonToSeat(seat: PlaneSeat, person: Passager) {
-        this.generateSeat()
-
-        return this.props.seats
+    async assignPersonToSeat(person: Passager) {
+        if(this.props.seats?.length ?? 0 < this.props.maximunNumberOfPassagers){
+            this.generateSeat()
+        }
+        const indexOfLastchair = this.props.seats? this.props.seats.length - 1 : 0
+        
+        await prisma.planeSeat.update({
+            data: {
+                passagerId: person.props.id
+            },
+            where: {
+                airPlaneId: this.props.id,
+                id: this.props.seats? this.props.seats[indexOfLastchair].props.id : 0
+                
+            }
+        })
     }
 }

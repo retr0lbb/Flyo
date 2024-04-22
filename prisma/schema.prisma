@@ -22,12 +22,18 @@ model AirPlane {
 model PlaneSeat {
   id Int @id @default(autoincrement())
 
-  airplane   AirPlane @relation(fields: [airPlaneId], references: [id])
+  airplane   AirPlane  @relation(fields: [airPlaneId], references: [id])
   airPlaneId String
+  Passager   Passager? @relation(fields: [passagerId], references: [id])
+  passagerId String?
 
   @@map("plane_seat")
 }
 
-model Passager{
-  
+model Passager {
+  id    String @id @default(uuid())
+  name  String
+  email String @unique
+
+  seats PlaneSeat[]
 }
