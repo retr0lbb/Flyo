@@ -23,6 +23,11 @@ export class Passager{
 
         return passager
     }
+    static async getPassagers(){
+        const passagers =  await prisma.passager.findMany()
+
+        return passagers
+    }
 
     async create(){
         const createdPassager = await prisma.passager.create({

@@ -1,22 +1,38 @@
 import { FastifyInstance } from "fastify";
 import { Passager } from "../schemas/passager";
-import { string, z } from "zod";
+import { z } from "zod";
+import { prisma } from "../lib/prisma";
 
 export async function assingSeat(app: FastifyInstance){
-    app.post("/passager/:passagerId/seat", async(req, res) => {
+    app.post("/flight/:flyCode/seat/:passagerId", async(req, res) => {
         
         const passagerIdSchema = z.object({
-            passagerId: z.string()
+            passagerId: z.string(),
+            flyCode: z.string()
         })
 
-        const {passagerId} = passagerIdSchema.parse(req.params)
-        
-        const passager = await Passager.findById(passagerId)
+        const { passagerId, flyCode } = passagerIdSchema.parse(req.params)
 
-        if(!passager){
-            throw new Error("Could not find passager")
+        const [passager, airplane] = await Promise.all([
+            Passager.findById(passagerId),
+            prisma.airPlane.findUnique({
+                where: {
+                    flyCode
+                }
+            })
+        ])
+        if(!passager || !airplane){
+            throw new Error("Could not find passager or plane")
         }
 
-        return passager
+        await prisma.planeSeat.create({
+            data: {
+                airPlaneId: airplane.id,
+                passagerId: passager.id
+            }
+        })
+
+
+        return res.status(201).send({message: `Seat assigned for flight ${airplane.flyCode} was suceded`})
     })
 }
