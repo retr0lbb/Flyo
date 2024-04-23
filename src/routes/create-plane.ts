@@ -19,7 +19,6 @@ export async function CreatePlane(app: FastifyInstance){
                 airPlaneModel: model,
                 maximunNumberOfPassagers: maximunOfPassagers,
                 captainName: captainName,
-                flightId: undefined
             }
         })
 

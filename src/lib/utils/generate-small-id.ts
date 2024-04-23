@@ -1,10 +1,9 @@
-export function generateId(){
-    const caracters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    let pass = ""
-    for(let i = 0; i< 5; i++){
-        let randomNumber = Math.round(Math.random() * caracters.length)
-
-        pass += caracters[randomNumber]
+export function generateId(length = 5) {
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let id = "";
+    for (let i = 0; i < length; i++) {
+        const randomNumber = Math.floor(Math.random() * characters.length);
+        id += characters[randomNumber];
     }
-    return pass;
+    return id;
 }

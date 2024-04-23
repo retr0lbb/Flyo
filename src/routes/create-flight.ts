@@ -15,25 +15,43 @@ export async function createFlight(app: FastifyInstance){
 
         const date = new Date(dateOfFlight)
 
-        const [flight, planes] = await Promise.all([
-            prisma.flight.create({
-                data: {
-                    dateOfflight: date,
-                    destiny: destiny,
-                    id: generateId(),
-                }
-            }),
-            prisma.airPlane.findMany({
+        const planes = await prisma.airPlane.findMany({
                 where: {
                     isAvaiableToFlight: true
                 }
             })
-        ])
+
 
         if(planes.length == 0){
             return reply.status(400).send({message: "No planes Avaiable"})
         }
 
-        return reply.status(201).send({message:"Flight created with sucess", flight, avaiablePlanes: planes})
+        try {
+            const flight = await prisma.flight.create({
+                data: {
+                    dateOfflight: date,
+                    id: generateId(),
+                    destiny
+                }
+            })
+    
+            await prisma.airPlane.update({
+                data: {
+                    isAvaiableToFlight: false,
+                    flightId: flight.id
+                },
+                where: {
+                    id: planes[0].id
+                }
+            })
+
+            return reply.status(201).send({message:"Flight created with sucess", flight, avaiablePlanes: planes}) 
+        } catch (error) {
+            if (error){
+                throw new Error("Server error")
+            }
+        }
+
+        
     })
 }
