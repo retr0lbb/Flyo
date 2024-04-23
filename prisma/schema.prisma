@@ -10,30 +10,39 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Flight {
+  id           String   @id
+  destiny      String
+  dateOfflight DateTime @map("flight_date")
+
+  Passager Passager[]
+}
+
 model AirPlane {
+  captainName              String      @map("captain_name")
   id                       String      @id @default(uuid())
   maximunNumberOfPassagers Int         @map("max_passagers")
-  destiny                  String
   airPlaneModel            String      @map("plane_model")
-  flyCode                  String      @unique @map("fly_code")
   seats                    PlaneSeat[]
 }
 
 model PlaneSeat {
   id Int @id @default(autoincrement())
 
-  airplane   AirPlane  @relation(fields: [airPlaneId], references: [id])
+  airplane   AirPlane  @relation(fields: [airPlaneId], references: [id], onDelete: Cascade)
   airPlaneId String
-  Passager   Passager? @relation(fields: [passagerId], references: [id])
+  Passager   Passager? @relation(fields: [passagerId], references: [id], onDelete: SetNull)
   passagerId String?
 
   @@map("plane_seat")
 }
 
 model Passager {
-  id    String @id @default(uuid())
+  id    String      @id @default(uuid())
   name  String
-  email String @unique
-
+  email String      @unique
   seats PlaneSeat[]
+
+  Flight   Flight? @relation(fields: [flightId], references: [id], onDelete: SetNull)
+  flightId String?
 }

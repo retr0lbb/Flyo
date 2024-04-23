@@ -16,8 +16,6 @@ export async function CreatePlane(app: FastifyInstance){
         const result = await prisma.airPlane.create({
             data: {
                 airPlaneModel: model,
-                destiny,
-                flyCode: "7718S",
                 maximunNumberOfPassagers: maximunOfPassagers
             }
         })

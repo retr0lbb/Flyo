@@ -1,9 +1,10 @@
 import { FastifyInstance } from "fastify"
-import { AirPlane } from "../schemas/plane.class"
+import { prisma } from "../lib/prisma"
 
 export async function getAirplane(app: FastifyInstance) {
     app.get("/plane", async(req, res)=>{
-        const planes = await AirPlane.find()
+
+        const planes = await prisma.airPlane.findMany()
 
         if(!planes){
             return res.status(404).send({message: "No planes finded"})
