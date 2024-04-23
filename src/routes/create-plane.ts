@@ -7,16 +7,19 @@ export async function CreatePlane(app: FastifyInstance){
     app.post("/plane", async(req, res)=>{
         const createPlaneBodySchema = z.object({
             maximunOfPassagers: z.number().int().positive().default(0),
-            destiny: z.string(),
-            model: z.string()
+            model: z.string(),
+            captainName: z.string()
+
         })
 
-        const {destiny, maximunOfPassagers, model} = createPlaneBodySchema.parse(req.body)
+        const { captainName, maximunOfPassagers, model} = createPlaneBodySchema.parse(req.body)
 
         const result = await prisma.airPlane.create({
             data: {
                 airPlaneModel: model,
-                maximunNumberOfPassagers: maximunOfPassagers
+                maximunNumberOfPassagers: maximunOfPassagers,
+                captainName: captainName,
+                flightId: undefined
             }
         })
 

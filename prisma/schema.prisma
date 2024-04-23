@@ -11,11 +11,11 @@ datasource db {
 }
 
 model Flight {
-  id           String   @id
+  id           String     @id @unique
   destiny      String
-  dateOfflight DateTime @map("flight_date")
-
-  Passager Passager[]
+  dateOfflight DateTime   @map("flight_date")
+  Passager     Passager[]
+  Plane        AirPlane?
 }
 
 model AirPlane {
@@ -24,6 +24,10 @@ model AirPlane {
   maximunNumberOfPassagers Int         @map("max_passagers")
   airPlaneModel            String      @map("plane_model")
   seats                    PlaneSeat[]
+
+  isAvaiableToFlight Boolean @default(true) @map("is_avaiable")
+  Flight             Flight? @relation(fields: [flightId], references: [id])
+  flightId           String? @unique
 }
 
 model PlaneSeat {
