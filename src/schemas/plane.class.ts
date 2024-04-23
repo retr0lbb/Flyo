@@ -8,7 +8,7 @@ export interface AirPlaneProps {
     destiny: any;
     model: string;
     seats?: PlaneSeat[];
-    id: string
+    id?: string
 }
 
 export class AirPlane {
@@ -74,7 +74,7 @@ export class AirPlane {
     private async generateSeat() {
         const createdSeat = await prisma.planeSeat.create({
             data: {
-                airPlaneId: this.props.id,
+                airPlaneId: this.props.id ?? "",
             }
         })
         const pushedPlaneSeat = new PlaneSeat({

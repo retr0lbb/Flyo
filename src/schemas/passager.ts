@@ -3,7 +3,7 @@ import { prisma } from "../lib/prisma"
 export interface PassagerProps {
     name: string
     email: string
-    id: string
+    id?: string
     seat?: any
 }
 
@@ -14,7 +14,6 @@ export class Passager{
         this.props = props
     }
 
-
     static async findById(id: string){
         const passager = await prisma.passager.findUnique({
             where: {
@@ -23,5 +22,16 @@ export class Passager{
         })
 
         return passager
+    }
+
+    async create(){
+        const createdPassager = await prisma.passager.create({
+            data: {
+                email: this.props.email,
+                name: this.props.name,
+            }
+        });
+
+        return createdPassager;
     }
 }
