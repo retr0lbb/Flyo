@@ -10,9 +10,7 @@ export async function createFlight(app: FastifyInstance){
             dateOfFlight: z.string()
         })
 
-
         const { dateOfFlight, destiny } = bodySchema.parse(request.body);
-
         const date = new Date(dateOfFlight)
 
         const planes = await prisma.airPlane.findMany({
@@ -51,7 +49,5 @@ export async function createFlight(app: FastifyInstance){
                 throw new Error("Server error")
             }
         }
-
-        
     })
 }

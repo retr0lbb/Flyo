@@ -22,6 +22,12 @@ export async function CreatePlane(app: FastifyInstance){
             }
         })
 
+        await prisma.planeSeat.create({
+            data: {
+                airPlaneId: result.id
+            }
+        })
+
         return res.status(201).send({result})
     })
 }
