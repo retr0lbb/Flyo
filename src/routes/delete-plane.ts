@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import {z}from "zod";
-import { AirPlane } from "../schemas/plane.class";
+import { prisma } from "../lib/prisma";
 
 export default async function deletePlane(app: FastifyInstance){
     app.delete("/plane/:id", async(req, res) =>{
@@ -10,7 +10,11 @@ export default async function deletePlane(app: FastifyInstance){
 
         try {
             const { id } = paramsSchema.parse(req.params)
-            await AirPlane.delete(id)
+            await prisma.airPlane.delete({
+                where: {
+                    id: id
+                }
+            })
 
             return res.status(200).send("ok")
         } catch (error) {

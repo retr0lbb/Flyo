@@ -1,5 +1,4 @@
 import { FastifyInstance } from "fastify";
-import { Passager } from "../schemas/passager";
 import { z } from "zod";
 import { prisma } from "../lib/prisma";
 
@@ -14,7 +13,11 @@ export async function assingSeat(app: FastifyInstance){
         const { passagerId, flyCode } = passagerIdSchema.parse(req.params)
 
         const [passager, airplane] = await Promise.all([
-            Passager.findById(passagerId),
+           prisma.passager.findUnique({
+            where: {
+                id: passagerId
+            }
+           }),
             prisma.airPlane.findUnique({
                 where: {
                     flyCode

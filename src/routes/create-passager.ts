@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { z } from "zod";
-import { Passager } from "../schemas/passager";
+import { prisma } from "../lib/prisma";
 
 export async function createPassager(app: FastifyInstance){
     app.post("/passager", async (req, res)=>{
@@ -11,7 +11,12 @@ export async function createPassager(app: FastifyInstance){
 
         const {email, name} = bodySchema.parse(req.body);
 
-       const passager = await new Passager({email, name}).create();
+        const passager = await prisma.passager.create({
+            data: {
+                email,
+                name
+            }
+        })
 
         return res.status(201).send({passager})
     })

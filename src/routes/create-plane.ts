@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { z } from "zod"
-import { AirPlane } from "../schemas/plane.class";
+import { prisma } from "../lib/prisma";
+
 
 export async function CreatePlane(app: FastifyInstance){
     app.post("/plane", async(req, res)=>{
@@ -12,9 +13,14 @@ export async function CreatePlane(app: FastifyInstance){
 
         const {destiny, maximunOfPassagers, model} = createPlaneBodySchema.parse(req.body)
 
-        const plane = new AirPlane({destiny, maximunNumberOfPassagers: maximunOfPassagers, model })
-
-        const result = await plane.create();
+        const result = await prisma.airPlane.create({
+            data: {
+                airPlaneModel: model,
+                destiny,
+                flyCode: "7718S",
+                maximunNumberOfPassagers: maximunOfPassagers
+            }
+        })
 
         return res.status(201).send({result})
     })
