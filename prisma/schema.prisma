@@ -38,6 +38,9 @@ model PlaneSeat {
   Passager   Passager? @relation(fields: [passagerId], references: [id], onDelete: SetNull)
   passagerId String?
 
+  rowCode  Int    @map("row_code")
+  seatCode String @map("seat_code")
+
   @@unique([airPlaneId, passagerId])
   @@map("plane_seat")
 }

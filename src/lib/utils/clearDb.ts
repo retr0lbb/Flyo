@@ -6,11 +6,15 @@ async function clearDb() {
 
     const [panes, people] = await Promise.all([
         prisma.airPlane.deleteMany(),
-        prisma.passager.deleteMany()
+        prisma.passager.deleteMany(),
+        prisma.planeSeat.deleteMany(),
+        prisma.flight.deleteMany()
     ])
 
 
     return [panes, people]
 }
 
-console.log(clearDb())
+console.log(clearDb().then(result => {
+    console.log(result)
+}))

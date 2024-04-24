@@ -8,11 +8,12 @@ export async function CreatePlane(app: FastifyInstance){
         const createPlaneBodySchema = z.object({
             maximunOfPassagers: z.number().int().positive().default(0),
             model: z.string(),
-            captainName: z.string()
+            captainName: z.string(),
+            seatsPerRow: z.number().int().positive()
 
         })
 
-        const { captainName, maximunOfPassagers, model} = createPlaneBodySchema.parse(req.body)
+        const { captainName, maximunOfPassagers, model, seatsPerRow } = createPlaneBodySchema.parse(req.body)
 
         const result = await prisma.airPlane.create({
             data: {
@@ -22,11 +23,26 @@ export async function CreatePlane(app: FastifyInstance){
             }
         })
 
-        await prisma.planeSeat.create({
-            data: {
-                airPlaneId: result.id
+
+        async function generatePlaneSeats(seatsPerRow: number){
+            const numberOfRows = Math.floor(result.maximunNumberOfPassagers / seatsPerRow);
+
+            for(let i = 0; i< numberOfRows; i++){
+                await prisma.planeSeat.createMany({
+                    data: [
+                        {airPlaneId: result.id, rowCode: i+1, seatCode: "A"},
+                        {airPlaneId: result.id, rowCode: i+1, seatCode: "B"},
+                        {airPlaneId: result.id, rowCode: i+1, seatCode: "C"},
+
+                        {airPlaneId: result.id, rowCode: i+1, seatCode: "D"},
+                        {airPlaneId: result.id, rowCode: i+1, seatCode: "E"},
+                        {airPlaneId: result.id, rowCode: i+1, seatCode: "F"}
+                    ]
+                })
             }
-        })
+        }
+
+        await generatePlaneSeats(seatsPerRow)
 
         return res.status(201).send({result})
     })
