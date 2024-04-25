@@ -42,8 +42,17 @@ model PlaneSeat {
   seatCode String @map("seat_code")
 
   @@unique([airPlaneId, passagerId])
+  @@unique([airPlaneId, rowCode, seatCode])
   @@map("plane_seat")
 }
+
+// model Ticket {
+// id           String @id
+// passagerName String @map("passager_name")
+// flightCode   String @map("flight_code")
+// seatCode     String @map("seat_code")
+// checkInURL   String @map("check_in_url")
+//}
 
 model Passager {
   id    String      @id @default(uuid())
