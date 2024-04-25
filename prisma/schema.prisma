@@ -60,6 +60,18 @@ model Passager {
   email String      @unique
   seats PlaneSeat[]
 
+  CheckIn CheckIn?
+
   Flight   Flight? @relation(fields: [flightId], references: [id], onDelete: SetNull)
   flightId String?
+}
+
+model CheckIn {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  Passager   Passager @relation(fields: [passagerId], references: [id])
+  passagerId String   @unique @map("passager_id")
+
+  @@map("check_in")
 }
