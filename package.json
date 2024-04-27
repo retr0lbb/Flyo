@@ -2,16 +2,20 @@
   "name": "iarport",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/server.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx watch src/server.ts"
+    "dev": "tsx watch src/server.ts",
+    "build": "tsup src --format esm",
+    "start": "node ."
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "tsx": "^4.7.2"
+    "tsup": "^8.0.2",
+    "tsx": "^4.7.2",
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "@prisma/client": "^5.12.1",

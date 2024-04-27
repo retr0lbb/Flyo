@@ -6,6 +6,7 @@ import { getTicket } from "./routes/get-ticket";
 import { checkInForFlight } from "./routes/check-in-flight";
 
 
+
 const app = fastify()
 
 app.register(CreatePlane)
